@@ -33,6 +33,7 @@ public class Knife extends AbstractBenchObject {
         this.step = false;
         this.speed = speed;
         targetPoints = generateTargetPoints(chamferInfo, woodLength);
+        targetPoints.add(new Point3D(chamferInfo.getX(), 0, -1));
     }
 
     private LinkedList<Point3D> generateTargetPoints(Point3D chamferInfo, double woodLength) {
