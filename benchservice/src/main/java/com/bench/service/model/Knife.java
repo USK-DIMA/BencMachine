@@ -1,7 +1,6 @@
 package com.bench.service.model;
 
 import com.bench.service.BenchManager;
-import com.bench.service.Main;
 import com.bench.service.util.DelegateGraphics2D;
 import javafx.geometry.Point3D;
 import org.slf4j.Logger;
@@ -52,7 +51,7 @@ public class Knife extends AbstractBenchObject {
             referencePoints.add((x + y - width));
         }
 
-        for (int cz = 1; cz <= z; cz++) { //проходим слои по одному лимиметру за раз
+        for (int cz = 1; cz <= z; cz++) { //проходим слои по одному милиметру за раз
             if (cz % 2 == 1) { //нечётные слои проходим слева на право
                 for (int i = 0; i < referencePoints.size(); i++) {
                     addTargetPointByReferencePoint(targetPoints, referencePoints.get(i), woodLength, cz);
@@ -82,11 +81,14 @@ public class Knife extends AbstractBenchObject {
         } catch (NoSuchElementException e) {
             return;
         }
+        double oldCurrentPointZ = position.getZ();
         boolean alreadyHere = updateCurrentPosition(tPoint);
+        wood.changeWidthClearRowYX(position.getY());
         if (alreadyHere) {
             try {
                 Point3D currentPoint = targetPoints.removeFirst();
-                collapseWood(wood, currentPoint, targetPoints.getFirst());
+                wood.addNewClearRowYX(oldCurrentPointZ < currentPoint.getZ(), currentPoint.getX(), width, (int) currentPoint.getZ());
+                collapseWoodXZ(wood, currentPoint, targetPoints.getFirst());
             } catch (NoSuchElementException e) { //норм, да? Пока так.
 
             }
@@ -100,11 +102,11 @@ public class Knife extends AbstractBenchObject {
      * @param currentPoint
      * @param first
      */
-    private void collapseWood(Wood wood, Point3D currentPoint, Point3D first) {
+    private void collapseWoodXZ(Wood wood, Point3D currentPoint, Point3D first) {
         //вся логика передачи информации дереву вообще ушербная, но пусть пока остаётся такая.
         //если будет время, переделать нормально
         if (currentPoint.getZ() > first.getZ()) { //если нож поднялся, то передаём дереву координаты, от куда он поднялся
-            wood.addClearPlan(currentPoint.getX(), currentPoint.getZ(), width);
+            wood.addClearPlanXZ(currentPoint.getX(), currentPoint.getZ(), width);
         }
     }
 
