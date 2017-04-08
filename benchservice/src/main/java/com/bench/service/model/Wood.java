@@ -1,11 +1,14 @@
 package com.bench.service.model;
 
+import com.bench.service.BenchManager;
+import com.bench.service.util.DelegateGraphics2D;
 import javafx.geometry.Point3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Created by Dmitry on 08.04.2017.
@@ -16,102 +19,73 @@ public class Wood extends AbstractBenchObject {
 
     private Point3D weedSize;
 
-    private PointXZ woodOffsertXZ;
-    private PointYX woodOffsertYX;
-
-    private double scaleYX;
-    private double scaleXZ;
-
-
+    private LinkedList<Rectangle> deletedPlanXZ = new LinkedList<>();
 
     private Color color = Color.ORANGE;
 
-    public Wood(Point2D offsetImages) {
-        super(offsetImages);
-    }
-
-    public Wood(Point2D offsetImages, Point3D weedSize, double scaleXY, double scaleXZ) {
-        super(offsetImages);
+    public Wood(Point3D weedSize) {
         this.weedSize = weedSize;
-        this.scaleYX = scaleXY;
-        this.scaleXZ= scaleXZ;
-        woodOffsertXZ = new PointXZ((int)(weedSize.getX()*scaleXZ), (int)(weedSize.getZ()*scaleXZ));
-        woodOffsertYX = new PointYX((int)(weedSize.getY()*scaleYX), (int)(weedSize.getX()*scaleYX));
     }
+
 
 
     @Override
-    public void update() {
-
+    public void update(HashMap<BenchManager.BenchObjectKey, AbstractBenchObject> benchObjects) {
     }
 
     @Override
-    public void drawXY(Graphics2D gXY) {
-        drawCleanWood(gXY, woodOffsertYX.getY(), woodOffsertYX.getX());
+    public void drawYX(DelegateGraphics2D gXY) {
+        gXY.setColor(Color.ORANGE);
+        gXY.fillRectYX(0, 0, (int)weedSize.getY(), (int)weedSize.getX());
     }
 
     @Override
-    public void drawXZ(Graphics2D gXZ) {
-        drawCleanWood(gXZ, woodOffsertXZ.getX(), woodOffsertXZ.getZ());
-    }
-
-    private void drawCleanWood(Graphics2D g, int woodX, int woodY) {
-        int x = imgWidth/2 - woodX/2;
-        int y = imgHeight/2 - woodY/2;
-        g.setColor(color);
-        g.fillRect(x, y, woodX, woodY);
+    public void drawXZ(DelegateGraphics2D gXZ) {
+        gXZ.setColor(Color.ORANGE);
+        gXZ.fillRectXZ(0, 0, (int)weedSize.getX(), (int)weedSize.getZ());
+        gXZ.setColor(Color.white);
+        deletedPlanXZ.forEach(r->gXZ.fillRectXZ(r.getPosition().getX(), r.getPosition().getY(), r.getWidth(), r.getHeight()));
     }
 
 
-    private class PointYX {
-        private int Y;
-        private int X;
 
-        public PointYX(int y, int x) {
-            Y = y;
-            X = x;
-        }
-
-        public int getY() {
-            return Y;
-        }
-
-        public void setY(int y) {
-            Y = y;
-        }
-
-        public int getX() {
-            return X;
-        }
-
-        public void setX(int x) {
-            X = x;
-        }
+    public void addClearPlan(double x, double z, int width) {
+        deletedPlanXZ.add(new Rectangle(new Point((int) x, 0), width, (int) z));
     }
 
-    private class PointXZ {
-        private int X;
-        private int Z;
+    public static class Rectangle {
+        private Point position;
+        private int width;
+        private int height;
 
-        public PointXZ(int x, int z) {
-            X = x;
-            Z = z;
+        public Rectangle(Point position, int width, int height) {
+            this.position = position;
+            this.width = width;
+            this.height = height;
         }
 
-        public int getX() {
-            return X;
+        public Point getPosition() {
+            return position;
         }
 
-        public void setX(int x) {
-            X = x;
+        public void setPosition(Point position) {
+            this.position = position;
         }
 
-        public int getZ() {
-            return Z;
+        public int getWidth() {
+            return width;
         }
 
-        public void setZ(int z) {
-            Z = z;
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
         }
     }
 

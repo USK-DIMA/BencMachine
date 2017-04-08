@@ -1,7 +1,7 @@
 package com.bench.service.view;
 
 import com.bench.service.BenchManager;
-import com.bench.service.IBench;
+import com.bench.service.interfaces.IBench;
 import com.bench.service.entity.WorkPackage;
 import javafx.geometry.Point3D;
 import org.slf4j.Logger;
@@ -54,13 +54,13 @@ public class MainForm {
 
     private void initSpinners() {
         //каждому свою модель
-        weedXSpiner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
-        weedYSpiner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
-        weedZSpiner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
+        weedXSpiner.setModel(new SpinnerNumberModel(150, 15, 1000, 1));
+        weedYSpiner.setModel(new SpinnerNumberModel(150, 15, 1000, 1));
+        weedZSpiner.setModel(new SpinnerNumberModel(15, 15, 1000, 1));
 
-        chamferXSpiner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
-        chamferYSpiner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
-        chamferZSpiner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
+        chamferXSpiner.setModel(new SpinnerNumberModel(0, 0, 1000, 1));
+        chamferYSpiner.setModel(new SpinnerNumberModel(10, 10, 1000, 1));
+        chamferZSpiner.setModel(new SpinnerNumberModel(10, 1, 1000, 1));
 
         timePauseSpiner.setModel(new SpinnerNumberModel(1, 1, 3000, 1));
     }
@@ -162,7 +162,7 @@ public class MainForm {
 
         Integer timePause = (Integer) timePauseSpiner.getValue();
         workPackage.setChamferInfo(new Point3D(cX, cY, cZ));
-        workPackage.setWeedSize(new Point3D(wX, wY, wZ));
+        workPackage.setWoodSize(new Point3D(wX, wY, wZ));
         workPackage.setTimePause(timePause);
         workPackage.setAuto(auto);
         return workPackage;

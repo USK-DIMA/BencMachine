@@ -1,5 +1,6 @@
-package com.bench.service;
+package com.bench.service.interfaces;
 
+import com.bench.service.BenchManager;
 import com.bench.service.entity.WorkPackage;
 
 /**

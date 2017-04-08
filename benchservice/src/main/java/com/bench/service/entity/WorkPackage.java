@@ -11,7 +11,7 @@ public class WorkPackage {
     /**
      * Размеры бруска
      */
-    private Point3D weedSize;
+    private Point3D woodSize;
 
     /**
      * Сдвиг, размер и глубина паза
@@ -33,12 +33,12 @@ public class WorkPackage {
         this.auto = auto;
     }
 
-    public Point3D getWeedSize() {
-        return weedSize;
+    public Point3D getWoodSize() {
+        return woodSize;
     }
 
-    public void setWeedSize(Point3D weedSize) {
-        this.weedSize = weedSize;
+    public void setWoodSize(Point3D woodSize) {
+        this.woodSize = woodSize;
     }
 
     public Point3D getChamferInfo() {
@@ -59,6 +59,6 @@ public class WorkPackage {
 
     @Override
     public String toString() {
-        return weedSize.toString() + "\n" + chamferInfo.toString() + "\n" + timePause;
+        return woodSize.toString() + "\n" + chamferInfo.toString() + "\n" + timePause;
     }
 }
