@@ -24,6 +24,8 @@ public class Knife extends AbstractBenchObject {
     private boolean auto;
     private boolean step;
 
+    private static final int depth = 1; //глубина выреза за раз. Со значениями отличными от единицы не протестено, поэтому не меняй
+
 
     public Knife(Point3D chamferInfo, double woodLength, int speed, boolean auto) {
         position = new Point3D(0, 0, -10);
@@ -49,8 +51,10 @@ public class Knife extends AbstractBenchObject {
             referencePoints.add((x + y - width));
         }
 
-        for (int cz = 1; cz <= z; cz++) { //проходим слои по одному милиметру за раз
-            if (cz % 2 == 1) { //нечётные слои проходим слева на право
+        int iter = 0; //задел на глибину выреза за раз больше одного
+        for (int cz = 1; cz <= z; cz += depth) { //проходим слои по одному милиметру за раз
+            iter++;
+            if (iter % 2 == 1) { //нечётные слои проходим слева на право
                 for (int i = 0; i < referencePoints.size(); i++) {
                     addTargetPointByReferencePoint(targetPoints, referencePoints.get(i), woodLength, cz);
                 }

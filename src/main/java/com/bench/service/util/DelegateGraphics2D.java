@@ -26,7 +26,7 @@ public class DelegateGraphics2D {
     private void fillRect(double scale, Point2D areaPosition, double areaX, double areaY, double width, double height) {
         int x = (int) Math.round((areaPosition.getX() + (areaX * scale)));
         int y = (int) Math.round((areaPosition.getY() + (areaY* scale)));
-        g.fillRect(x, y, (int) Math.round((width*scale)), (int) Math.round((height*scale)));
+        g.fillRect(x, y, (int) Math.ceil((width * scale)), (int) Math.ceil((height * scale)));
     }
 
     public void fillRectXZ(double x, double y, double width, double height) {
