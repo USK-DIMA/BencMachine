@@ -19,4 +19,9 @@ public interface IBench {
     void start();
 
     void step();
+
+    @FunctionalInterface
+    interface EndWorkListener {
+        void end(String message);
+    }
 }

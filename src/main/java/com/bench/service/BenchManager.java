@@ -18,6 +18,10 @@ import java.util.*;
 
 public class BenchManager extends Thread implements IBench {
 
+    public HashMap<BenchObjectKey, AbstractBenchObject> getObjects() {
+        return benchObjects;
+    }
+
     public enum BenchObjectKey {
         KNIFE, WOOD
     }
@@ -39,6 +43,10 @@ public class BenchManager extends Thread implements IBench {
     private JPanel viewPanel;
     private HashMap<BenchObjectKey, AbstractBenchObject> benchObjects;
     private EndWorkListener endWorkListener;
+
+    public EndWorkListener getEndWorkListener() {
+        return endWorkListener;
+    }
 
     public BenchManager(JPanel panel) {
         logger.info("Create BenchManager");
@@ -96,7 +104,7 @@ public class BenchManager extends Thread implements IBench {
         if(benchObject == null) {
             return;
         }
-        benchObject.update(benchObjects);
+        benchObject.update(this);
     }
 
     private void benchRender() {
@@ -161,7 +169,7 @@ public class BenchManager extends Thread implements IBench {
         Point3D woodSize = workPackage.getWoodSize();
         updateGraphicContext(woodSize);
         Wood wood = new Wood(woodSize);
-        Knife knife = new Knife(workPackage.getChamferInfo(), woodSize.getY());
+        Knife knife = new Knife(workPackage.getChamferInfo(), woodSize.getY(), workPackage.getTimePause(), workPackage.isAuto());
         addBenchObject(BenchObjectKey.WOOD, wood);
         addBenchObject(BenchObjectKey.KNIFE, knife);
     }
@@ -214,17 +222,12 @@ public class BenchManager extends Thread implements IBench {
 
     @Override
     public void changeModeWork(boolean isAuto) {
-        //todo
+        ((Knife) benchObjects.get(BenchObjectKey.KNIFE)).setAuto(isAuto);
     }
 
     @Override
     public void step() {
-        //todo
+        ((Knife) benchObjects.get(BenchObjectKey.KNIFE)).setStep(true);
     }
 
-
-    @FunctionalInterface
-    public interface EndWorkListener {
-        void end(String message);
-    }
 }

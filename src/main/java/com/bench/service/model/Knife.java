@@ -3,21 +3,14 @@ package com.bench.service.model;
 import com.bench.service.BenchManager;
 import com.bench.service.util.DelegateGraphics2D;
 import javafx.geometry.Point3D;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-/**
- * Created by Dmitry on 08.04.2017.
- */
+
 public class Knife extends AbstractBenchObject {
-
-    private static final Logger logger = LoggerFactory.getLogger(Knife.class);
-
 
     /**
      * Позиция ножа -- левый кончик острия ножа
@@ -27,15 +20,20 @@ public class Knife extends AbstractBenchObject {
     private static final int width = 10;
     private static final double length = 2;
     private LinkedList<Point3D> targetPoints;
-    private double speed = 10;
+    private int speed;
+    private boolean auto;
+    private boolean step;
 
 
-    public Knife(Point3D chamferInfo, double woodLength) {
+    public Knife(Point3D chamferInfo, double woodLength, int speed, boolean auto) {
         position = new Point3D(0, 0, -10);
+        this.auto = auto;
+        this.step = false;
+        this.speed = speed;
         targetPoints = generateTargetPoints(chamferInfo, woodLength);
     }
 
-    private LinkedList generateTargetPoints(Point3D chamferInfo, double woodLength) {
+    private LinkedList<Point3D> generateTargetPoints(Point3D chamferInfo, double woodLength) {
         LinkedList<Point3D> targetPoints = new LinkedList<>();
         int x = (int) chamferInfo.getX(); //начало паза
         int y = (int) chamferInfo.getY(); //ширина паза
@@ -66,15 +64,18 @@ public class Knife extends AbstractBenchObject {
     }
 
     private void addTargetPointByReferencePoint(List<Point3D> targetPoints, Integer p, double woodLength, int zLayer) {
-        targetPoints.add(new Point3D(p, 0, zLayer - 1));
+        targetPoints.add(new Point3D(p, 0, zLayer - 2));
         targetPoints.add(new Point3D(p, 0, zLayer));
         targetPoints.add(new Point3D(p, woodLength, zLayer));
         targetPoints.add(new Point3D(p, woodLength, zLayer - 1));
     }
 
     @Override
-    public void update(HashMap<BenchManager.BenchObjectKey, AbstractBenchObject> benchObjects) {
-        Wood wood = (Wood) benchObjects.get(BenchManager.BenchObjectKey.WOOD);
+    public void update(BenchManager benchManager) {
+        if (!auto & !step) {
+            return;
+        }
+        Wood wood = (Wood) benchManager.getObjects().get(BenchManager.BenchObjectKey.WOOD);
         Point3D tPoint;
         try {
             tPoint = targetPoints.getFirst();
@@ -88,19 +89,21 @@ public class Knife extends AbstractBenchObject {
             try {
                 Point3D currentPoint = targetPoints.removeFirst();
                 wood.addNewClearRowYX(oldCurrentPointZ < currentPoint.getZ(), currentPoint.getX(), width, (int) currentPoint.getZ());
+                if (oldCurrentPointZ > currentPoint.getZ()) {
+                    step = false;
+                }
                 collapseWoodXZ(wood, currentPoint, targetPoints.getFirst());
             } catch (NoSuchElementException e) { //норм, да? Пока так.
 
+            }
+            if (targetPoints.size() == 0) {
+                benchManager.getEndWorkListener().end("Работа завершена");
             }
         }
     }
 
     /**
      * Cообщает дереву, что у него отрезали кусок, т.е. дерево меняет своё состояние
-     *
-     * @param wood
-     * @param currentPoint
-     * @param first
      */
     private void collapseWoodXZ(Wood wood, Point3D currentPoint, Point3D first) {
         //вся логика передачи информации дереву вообще ушербная, но пусть пока остаётся такая.
@@ -148,8 +151,15 @@ public class Knife extends AbstractBenchObject {
     @Override
     public void drawXZ(DelegateGraphics2D gXZ) {
         gXZ.setColor(Color.gray);
-        //gXZ.fillRectXZ(position.getX(), 0, width, -100);
         gXZ.fillRectXZ(position.getX(), -100, width, 100 + position.getZ());
+    }
+
+    public void setAuto(boolean auto) {
+        this.auto = auto;
+    }
+
+    public void setStep(boolean step) {
+        this.step = step;
     }
 
     public void stop() {

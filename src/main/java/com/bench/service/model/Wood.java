@@ -3,19 +3,12 @@ package com.bench.service.model;
 import com.bench.service.BenchManager;
 import com.bench.service.util.DelegateGraphics2D;
 import javafx.geometry.Point3D;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 
-/**
- * Created by Dmitry on 08.04.2017.
- */
-public class Wood extends AbstractBenchObject {
 
-    private static final Logger logger = LoggerFactory.getLogger(Wood.class);
+public class Wood extends AbstractBenchObject {
 
     private Point3D weedSize;
 
@@ -32,7 +25,7 @@ public class Wood extends AbstractBenchObject {
 
 
     @Override
-    public void update(HashMap<BenchManager.BenchObjectKey, AbstractBenchObject> benchObjects) {
+    public void update(BenchManager benchObjects) {
     }
 
     @Override
@@ -56,18 +49,18 @@ public class Wood extends AbstractBenchObject {
     }
 
 
-    public void addClearPlanXZ(double x, double z, int width) {
+    void addClearPlanXZ(double x, double z, int width) {
         deletedPlanXZ.add(new Rectangle(new Point((int) x, 0), width, (int) z));
     }
 
-    public void changeWidthClearRowYX(double rowY) {
+    void changeWidthClearRowYX(double rowY) {
         if (currentDeletet != null) {
             currentDeletet.setWidth((int) Math.round(rowY));
         }
     }
 
 
-    public void addNewClearRowYX(boolean add, double targetPointX, int knifeWith, int zIndex) {
+    void addNewClearRowYX(boolean add, double targetPointX, int knifeWith, int zIndex) {
         if (add) {
             currentDeletet = new Rectangle(new Point(0, (int) Math.round(targetPointX)), 0, knifeWith);
             currentDeletet.generateColorByZindex(zIndex, (int) weedSize.getZ());
@@ -81,56 +74,35 @@ public class Wood extends AbstractBenchObject {
         private Point position;
         private int width;
         private int height;
-        private int zIndex;
         private Color color;
 
-        public Rectangle(Point position, int width, int height) {
+        Rectangle(Point position, int width, int height) {
             this.position = position;
             this.width = width;
             this.height = height;
         }
 
-        public Point getPosition() {
+        Point getPosition() {
             return position;
         }
 
-        public int getWidth() {
+        int getWidth() {
             return width;
         }
 
-        public int getHeight() {
+        int getHeight() {
             return height;
         }
 
-        public int getzIndex() {
-            return zIndex;
-        }
-
-        public void setzIndex(int zIndex) {
-            this.zIndex = zIndex;
-        }
-
-        public void setPosition(Point position) {
-            this.position = position;
-        }
-
-        public void setWidth(int width) {
+        void setWidth(int width) {
             this.width = width;
         }
 
-        public void setHeight(int height) {
-            this.height = height;
-        }
-
-        public Color getColor() {
+        Color getColor() {
             return color;
         }
 
-        public void setColor(Color color) {
-            this.color = color;
-        }
-
-        public void generateColorByZindex(int zIndex, int woodZ) {
+        void generateColorByZindex(int zIndex, int woodZ) {
             if (woodZ >= zIndex) {
                 color = Color.WHITE;
             }

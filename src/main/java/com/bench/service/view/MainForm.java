@@ -4,16 +4,10 @@ import com.bench.service.BenchManager;
 import com.bench.service.interfaces.IBench;
 import com.bench.service.entity.WorkPackage;
 import javafx.geometry.Point3D;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 
-/**
- * Created by Dmitry on 08.04.2017.
- */
 public class MainForm {
-    private static final Logger logger = LoggerFactory.getLogger(MainForm.class);
 
     private JPanel viewPanel;
     private JPanel controlPanel;
@@ -62,13 +56,13 @@ public class MainForm {
         chamferYSpiner.setModel(new SpinnerNumberModel(10, 10, 1000, 1));
         chamferZSpiner.setModel(new SpinnerNumberModel(10, 1, 1000, 1));
 
-        timePauseSpiner.setModel(new SpinnerNumberModel(1, 1, 3000, 1));
+        timePauseSpiner.setModel(new SpinnerNumberModel(1, 1, 10, 1));
     }
 
     private void initFrame(String frameName) {
         frame = new JFrame(frameName);
         frame.setContentPane(mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         setButtonsState();
@@ -140,12 +134,35 @@ public class MainForm {
 
     private void startWork() {
         WorkPackage workPackage = collectWorkPackage();
+        if (!validAndInfo(workPackage)) {
+            return;
+        }
         benchManager.startWork(workPackage);
         work = true;
         auto = workPackage.isAuto();
         setButtonsState();
         setEnabledPackageWorkPanel(false);
         info("Начало работы станка в " + (auto?"автоматическом":"ручном") + " режиме");
+    }
+
+    /**
+     * Проверят валидацию собранного пакета.
+     * В случае ошибко выводи сообщение в Info
+     *
+     * @param workPackage
+     * @return
+     */
+    private boolean validAndInfo(WorkPackage workPackage) {
+        //todo Разрулить по нормальному
+        if (workPackage.getWoodSize().getZ() <= workPackage.getChamferInfo().getZ()) {
+            info("Выбрана слишком большая глубина паза");
+            return false;
+        }
+        if (workPackage.getWoodSize().getX() <= workPackage.getChamferInfo().getX()) {
+            info("Смещение паза слишком велико");
+            return false;
+        }
+        return true;
     }
 
     private WorkPackage collectWorkPackage() {

@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 /**
  * Created by Dmitry on 08.04.2017.
@@ -15,8 +13,10 @@ import java.util.LinkedHashMap;
 abstract public class AbstractBenchObject {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBenchObject.class);
+    private boolean auto;
+    private boolean step;
 
-    abstract public void update(HashMap<BenchManager.BenchObjectKey, AbstractBenchObject> benchObjects);
+    abstract public void update(BenchManager benchObjects);
 
     final public void drawYX(Graphics2D gXY) {
         drawYX(new DelegateGraphics2D(gXY));
@@ -29,7 +29,5 @@ abstract public class AbstractBenchObject {
     abstract public void drawYX(DelegateGraphics2D gXY);
 
     abstract public void drawXZ(DelegateGraphics2D gXZ);
-
-
 
 }
