@@ -52,7 +52,7 @@ public class MainForm {
         weedYSpiner.setModel(new SpinnerNumberModel(150, 15, 1000, 1));
         weedZSpiner.setModel(new SpinnerNumberModel(15, 15, 1000, 1));
 
-        chamferXSpiner.setModel(new SpinnerNumberModel(0, 0, 1000, 1));
+        chamferXSpiner.setModel(new SpinnerNumberModel(0, -9, 1000, 1));
         chamferYSpiner.setModel(new SpinnerNumberModel(10, 10, 1000, 1));
         chamferZSpiner.setModel(new SpinnerNumberModel(10, 1, 1000, 1));
 

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public class Wood extends AbstractBenchObject {
 
-    private Point3D weedSize;
+    private Point3D woodSize;
 
     private LinkedList<Rectangle> deletedPlanXZ = new LinkedList<>();
 
@@ -20,7 +20,7 @@ public class Wood extends AbstractBenchObject {
     private Color color = Color.ORANGE;
 
     public Wood(Point3D weedSize) {
-        this.weedSize = weedSize;
+        this.woodSize = weedSize;
     }
 
 
@@ -31,7 +31,7 @@ public class Wood extends AbstractBenchObject {
     @Override
     public void drawYX(DelegateGraphics2D gXY) {
         gXY.setColor(color);
-        gXY.fillRectYX(0, 0, (int) weedSize.getY(), (int) weedSize.getX());
+        gXY.fillRectYX(0, 0, (int) woodSize.getY(), (int) woodSize.getX());
         deletedPlanYX.forEach(r -> drawRectangleYX(gXY, r));
     }
 
@@ -43,7 +43,7 @@ public class Wood extends AbstractBenchObject {
     @Override
     public void drawXZ(DelegateGraphics2D gXZ) {
         gXZ.setColor(color);
-        gXZ.fillRectXZ(0, 0, (int) weedSize.getX(), (int) weedSize.getZ());
+        gXZ.fillRectXZ(0, 0, (int) woodSize.getX(), (int) woodSize.getZ());
         gXZ.setColor(Color.white);
         deletedPlanXZ.forEach(r -> gXZ.fillRectXZ(r.getPosition().getX(), r.getPosition().getY(), r.getWidth(), r.getHeight()));
     }
@@ -62,8 +62,20 @@ public class Wood extends AbstractBenchObject {
 
     void addNewClearRowYX(boolean add, double targetPointX, int knifeWith, int zIndex) {
         if (add) {
-            currentDeletet = new Rectangle(new Point(0, (int) Math.round(targetPointX)), 0, knifeWith);
-            currentDeletet.generateColorByZindex(zIndex, (int) weedSize.getZ());
+            int rectangleHeight;
+            int rectanglePositionY = (int) Math.round(targetPointX);
+            int widthShift = 0;
+            if (rectanglePositionY < 0) {
+                widthShift = rectanglePositionY;
+                rectanglePositionY = 0;
+            }
+            if (targetPointX + knifeWith > woodSize.getX()) {
+                rectangleHeight = (int) (knifeWith - (targetPointX + knifeWith - woodSize.getX()));
+            } else {
+                rectangleHeight = knifeWith;
+            }
+            currentDeletet = new Rectangle(new Point(0, rectanglePositionY), 0, rectangleHeight + widthShift);
+            currentDeletet.generateColorByZindex(zIndex, (int) woodSize.getZ());
             deletedPlanYX.add(currentDeletet);
         } else {
             currentDeletet = null;
