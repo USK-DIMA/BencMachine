@@ -106,6 +106,9 @@ public class Wood extends AbstractBenchObject {
             if (woodZ >= zIndex) {
                 color = Color.WHITE;
             }
+            if (zIndex < 0) {
+                zIndex = 0;
+            }
             color = new Color(255 * (woodZ - zIndex) / woodZ, 200 * (woodZ - zIndex) / woodZ, 0);
         }
     }
