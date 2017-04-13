@@ -7,6 +7,13 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 
 
+/**
+ * Класс делегиурет  Graphics2D.
+ * Класс отвечает за масштабирование объектов для отрисовки в изображениями
+ * Параметры для мастабирования берутся из GraphicContext
+ *
+ * @see GraphicContext
+ */
 public class DelegateGraphics2D {
     private static final Logger logger = LoggerFactory.getLogger(DelegateGraphics2D.class);
 

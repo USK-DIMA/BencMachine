@@ -16,6 +16,10 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
+/**
+ * Класс, отвечающий за отрисовкы, обновление состояний обхектов, их инициализщацию и прочие связи.
+ * Основной класс для отрисовки.
+ */
 public class BenchManager extends Thread implements IBench {
 
     public HashMap<BenchObjectKey, AbstractBenchObject> getObjects() {
@@ -34,14 +38,42 @@ public class BenchManager extends Thread implements IBench {
     private static final int FPS = 33;
     private BufferedImage imageXY;
     private BufferedImage imageXZ;
+
+    /**
+     * графика для рисования на первом изображении (в координатах XY)
+     */
     private Graphics2D gXY;
+
+    /**
+     * графика для рисования на втором изображении (в координатах XZ)
+     */
     private Graphics2D gXZ;
+
+    /**
+     * положение первтого изображения на JFrame
+     */
     private Point2D positionImageXY;
+
+    /**
+     * положение второго изображения на JFrame
+     */
     private Point2D positionImageXZ;
+
+    /**
+     * размеры изображений, на которых происходит отрисовка
+     */
     private Point2D imagesOffset;
 
     private JPanel viewPanel;
+
+    /**
+     * объекты для отрисвки (Нож и Брусок).
+     */
     private HashMap<BenchObjectKey, AbstractBenchObject> benchObjects;
+
+    /**
+     * Объект, вызывающиеся при окончании отрисовки
+     */
     private EndWorkListener endWorkListener;
 
     public EndWorkListener getEndWorkListener() {
@@ -72,7 +104,10 @@ public class BenchManager extends Thread implements IBench {
         GraphicContext.setImageOffset(imagesOffset);
     }
 
-
+    /**
+     * иницаилизация игровых объектов.
+     * В процессе развития метод опустел)
+     */
     private void initBenchObjects() {
         logger.info("Init BenchObjects");
         benchObjects = new LinkedHashMap<>();
@@ -83,6 +118,10 @@ public class BenchManager extends Thread implements IBench {
         this.endWorkListener = endWorkListener;
     }
 
+
+    /**
+     * Запуск процесса обновления состояний объектов и их отрисовки
+     */
     @Override
     public void run() {
         imageXY = new BufferedImage((int) imagesOffset.getX(), (int) imagesOffset.getY(), BufferedImage.TYPE_INT_RGB);
@@ -107,6 +146,9 @@ public class BenchManager extends Thread implements IBench {
         benchObject.update(this);
     }
 
+    /**
+     * Отрисовка объектов
+     */
     private void benchRender() {
         drawBackground(gXY, gXZ);
         drawObject(benchObjects.get(BenchObjectKey.WOOD));
@@ -138,6 +180,7 @@ public class BenchManager extends Thread implements IBench {
             g.drawRect(0, 0, GraphicContext.getImgWidth() - 1, GraphicContext.getImgHeight() - 1);
         }
     }
+
     private void drawAxis(Graphics2D g, String axisToRight, String axisToBottom) {
         int padding = 12;
         int length = 20;

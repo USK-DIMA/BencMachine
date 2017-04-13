@@ -36,6 +36,13 @@ public class Knife extends AbstractBenchObject {
         targetPoints.add(new Point3D(chamferInfo.getX(), 0, -1));
     }
 
+    /**
+     * Генерация опорных точек по котороым будет 'ходить нож' и резать
+     *
+     * @param chamferInfo
+     * @param woodLength
+     * @return
+     */
     private LinkedList<Point3D> generateTargetPoints(Point3D chamferInfo, double woodLength) {
         LinkedList<Point3D> targetPoints = new LinkedList<>();
         int x = (int) chamferInfo.getX(); //начало паза

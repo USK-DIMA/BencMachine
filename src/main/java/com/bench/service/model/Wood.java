@@ -60,6 +60,14 @@ public class Wood extends AbstractBenchObject {
     }
 
 
+    /**
+     * Отрисовывает на бруске белые прямоугольники, и визуально выглядет, чтобрусок режется
+     *
+     * @param add
+     * @param targetPointX
+     * @param knifeWith
+     * @param zIndex
+     */
     void addNewClearRowYX(boolean add, double targetPointX, int knifeWith, int zIndex) {
         if (add) {
             int rectangleHeight;
