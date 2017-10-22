@@ -23,6 +23,9 @@ public class WorkPackage {
      */
     private int timePause;
 
+    /**
+     * Автоматический или ручной режим
+     */
     private boolean auto;
 
     public boolean isAuto() {

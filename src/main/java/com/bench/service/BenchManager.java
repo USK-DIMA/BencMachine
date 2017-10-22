@@ -218,10 +218,8 @@ public class BenchManager extends Thread implements IBench {
     }
 
     /**
-     * Смотрит на размеры бруска и выставляет новые коэфициенты масштаблинрования
+     * Смотрит на размеры бруска и выставляет новые коэфициенты масштабирования
      * для изображений
-     *
-     * @param weedSize
      */
     private void updateGraphicContext(Point3D weedSize) {
         double scaleYX = calculateScale(imagesOffset, (int) Math.round(weedSize.getY()), (int) Math.round(weedSize.getX()), 5);
@@ -236,7 +234,7 @@ public class BenchManager extends Thread implements IBench {
     }
 
     /**
-     * Расчитиывает коэффициент масштабирования для объекта, чтобы он целиок уместился
+     * Расчитывает коэффициент масштабирования для объекта, чтобы он целиок уместился
      * на изображении
      *
      * @param imageOffset доступные размеры изображения
